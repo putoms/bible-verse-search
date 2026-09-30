@@ -1,0 +1,284 @@
+/* 성경 본문에 쓸 따뜻한 느낌의 한글 명조(세리프) 폰트를 불러온다.
+   UI(버튼, 입력창 등)는 기존처럼 산세리프를 쓰고, 본문만 이 폰트로 구분해서
+   "읽는 글"과 "조작하는 UI"의 분위기를 다르게 가져간다 */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&display=swap");
+
+/* ===== 색상/여백 등 디자인 토큰을 변수로 모아둔다 =====
+   같은 색을 여러 곳에서 반복해서 적지 않고 한 곳만 고치면 전체에 반영되도록 하기 위함이다 */
+:root {
+  --color-bg: #f6efe4;           /* 은은한 미색 배경 */
+  --color-surface: #fffdf9;      /* 카드(컨테이너) 배경 */
+  --color-verse-bg: #fbf3e3;     /* 본문 카드의 양피지 같은 따뜻한 배경 */
+  --color-primary: #8a5a3b;      /* 차분한 갈색 계열 포인트 색 */
+  --color-primary-dark: #6e4429;
+  --color-primary-soft: #f1e3d2; /* 호버/포커스용 옅은 갈색 */
+  --color-text: #3d332b;         /* 완전한 검정 대신 따뜻한 다크브라운 */
+  --color-text-muted: #8b7c6a;
+  --color-border: #e6d8c3;
+  --color-error: #a8442b;
+  --color-success: #4f7942;
+  --radius-lg: 14px;
+  --radius-sm: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 48px 20px;
+  background-color: var(--color-bg);
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  color: var(--color-text);
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--color-surface);
+  padding: 36px 32px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  /* 회색 대신 갈색 톤이 살짝 섞인 부드러운 그림자로 차분한 인상을 준다 */
+  box-shadow: 0 6px 24px rgba(110, 68, 41, 0.08);
+}
+
+h1 {
+  text-align: center;
+  color: var(--color-primary-dark);
+  margin: 0 0 28px;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* 제목 앞에 책 아이콘을 붙인다. HTML 텍스트는 그대로 두고 CSS만으로 장식을 더한 것이라
+   script.js가 찾는 h1 요소 자체에는 아무 영향이 없다 */
+h1::before {
+  content: "📖 ";
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+#search-input {
+  flex: 1;
+  /* flex 아이템의 기본 최소 너비는 auto라서, 내용이 길면 부모 밖으로 튀어나갈 수 있다.
+     min-width: 0으로 그 기본값을 없애서 화면 밖으로 나가지 않게 막는다 */
+  min-width: 0;
+  padding: 11px 14px;
+  /* 16px 이상으로 해야 모바일 사파리에서 입력창 포커스 시 자동 확대(zoom)가 안 일어난다 */
+  font-size: 16px;
+  color: var(--color-text);
+  background-color: #fffefb;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+#search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+#search-button {
+  padding: 10px 22px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#search-button:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* 검색 중에는 script.js가 disabled 속성을 켜두는데,
+   그 상태를 시각적으로도 자연스럽게 보여주기 위한 순수 CSS 스타일이다 */
+#search-button:disabled {
+  background-color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.select-search-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.select-search-box select {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  font-size: 15px;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: #fffefb;
+}
+
+.select-search-box select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+#select-search-button {
+  flex-basis: 100%;
+  padding: 10px;
+  font-size: 15px;
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#select-search-button:hover {
+  background-color: var(--color-primary-soft);
+}
+
+#loading-message {
+  color: var(--color-text-muted);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+#error-message {
+  color: var(--color-error);
+  margin-bottom: 10px;
+}
+
+/* ===== 검색 결과: 이 앱에서 가장 눈에 잘 들어와야 하는 부분 =====
+   세리프 폰트, 넉넉한 줄간격, 따뜻한 카드 배경과 왼쪽 포인트 테두리로
+   마치 실제 성경책의 한 구절을 오려낸 듯한 느낌을 준다 */
+#result-area {
+  font-family: "Noto Serif KR", "Malgun Gothic", serif;
+  font-size: 19px;
+  line-height: 1.95;
+  color: var(--color-text);
+  background-color: var(--color-verse-bg);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 22px 24px;
+  margin: 6px 0 20px;
+  /* 긴 구절이 화면 폭을 넘기지 않도록 강제로 줄바꿈한다.
+     word-break: keep-all은 한글 단어 중간이 어색하게 끊기지 않도록 해준다 */
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+
+/* 아직 검색 결과가 없어 비어 있을 때는 카드 스타일(배경/테두리/여백)을 숨겨서
+   빈 상자가 덩그러니 보이지 않게 한다. textContent가 빈 문자열일 때만 적용된다 */
+#result-area:empty {
+  background-color: transparent;
+  border-left: none;
+  padding: 0;
+  margin: 0;
+}
+
+#copy-button {
+  margin-top: 4px;
+  padding: 9px 18px;
+  font-size: 14px;
+  color: var(--color-primary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+#copy-button:hover {
+  background-color: var(--color-primary-soft);
+}
+
+#copy-message {
+  margin-top: 8px;
+  color: var(--color-success);
+  font-size: 14px;
+}
+
+.recent-searches {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
+}
+
+.recent-searches h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+#recent-search-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#recent-search-list li {
+  padding: 10px 12px;
+  color: var(--color-primary-dark);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease;
+}
+
+#recent-search-list li:hover {
+  background-color: var(--color-primary-soft);
+}
+
+/* ===== 반응형 디자인 (화면 폭 600px 이하: 스마트폰 등) =====
+   미디어 쿼리는 "화면 크기가 이 조건에 맞을 때만 아래 CSS를 적용해줘"라는 뜻이다.
+   여기서는 컨테이너 최대 너비(600px)와 같은 기준으로,
+   그보다 화면이 좁아지면 여백을 줄이고 버튼/글자를 손가락으로 쓰기 편한 크기로 키운다 */
+@media (max-width: 600px) {
+  body {
+    /* 데스크톱의 좌우 20px 여백은 좁은 화면에서 과한 낭비라 12px로 줄인다 */
+    padding: 20px 12px;
+  }
+
+  .container {
+    padding: 22px 18px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  #search-button {
+    /* 손가락으로 누르기 편하도록 세로 여백을 넓혀 터치 영역을 44px 이상으로 확보한다 */
+    padding: 12px 18px;
+    min-height: 44px;
+  }
+
+  #copy-button {
+    /* 복사 버튼도 같은 이유로 터치 영역을 넓히고, 폭을 꽉 채워 누르기 쉽게 한다 */
+    width: 100%;
+    min-height: 44px;
+    padding: 12px;
+  }
+
+  #result-area {
+    /* 모바일 화면에서는 글자를 살짝 키우고 줄 간격도 넉넉히 해서 읽기 편하게 한다 */
+    font-size: 18px;
+    line-height: 1.9;
+    padding: 18px 16px;
+  }
+
+  #recent-search-list li {
+    /* 최근 검색 항목도 터치하기 편하도록 위아래 여백을 넓힌다 */
+    padding: 12px 10px;
+    font-size: 15px;
+  }
+}

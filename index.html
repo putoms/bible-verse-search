@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>성경 구절 검색</title>
+  <!-- style.css 파일을 연결해서 화면 디자인을 적용한다 -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- 앱 전체를 감싸는 컨테이너 -->
+  <div class="container">
+
+    <!-- 1. 앱 제목 -->
+    <h1>성경 구절 검색</h1>
+
+    <!-- 검색어를 입력하고 버튼을 누르는 영역 -->
+    <div class="search-box">
+      <!-- 2. 성경 구절 입력창 (사용자가 "요한복음 3장 16절" 같은 텍스트를 입력) -->
+      <input type="text" id="search-input" placeholder="예: 요한복음 3장 16절" />
+
+      <!-- 3. 검색 버튼 (나중에 script.js에서 클릭 이벤트를 연결) -->
+      <button id="search-button">검색</button>
+    </div>
+
+    <!-- 직접 입력하지 않고, 책/장/절을 선택해서 검색하는 영역
+         (옵션 목록은 script.js에서 채워 넣는다) -->
+    <div class="select-search-box">
+      <select id="book-select"></select>
+      <select id="chapter-select"></select>
+      <select id="verse-select"></select>
+      <button id="select-search-button">선택해서 검색</button>
+    </div>
+
+    <!-- 5. 로딩 메시지 영역 (검색 중일 때만 보여줄 예정, 지금은 비워둠) -->
+    <div id="loading-message"></div>
+
+    <!-- 6. 오류 메시지 영역 (검색 실패 시 에러 문구를 보여줄 예정, 지금은 비워둠) -->
+    <div id="error-message"></div>
+
+    <!-- 4. 검색 결과가 표시될 영역 -->
+    <div id="result-area"></div>
+
+    <!-- 본문 복사 버튼과, 복사 완료 메시지를 보여줄 영역 -->
+    <button id="copy-button">본문 복사</button>
+    <div id="copy-message"></div>
+
+    <!-- 최근 검색 목록 (script.js에서 li 항목을 채워 넣는다) -->
+    <div class="recent-searches">
+      <h2>최근 검색</h2>
+      <ul id="recent-search-list"></ul>
+    </div>
+
+  </div>
+
+  <!-- script.js 파일을 연결해서 동작(기능)을 추가한다 -->
+  <script src="script.js"></script>
+</body>
+</html>
